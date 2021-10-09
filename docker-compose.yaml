@@ -1,0 +1,30 @@
+version: '3.7'
+
+services:
+  postgres:
+    container_name: postgres
+    image: postgres
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=vecindario 
+    expose: 
+      - 5432
+    restart: unless-stopped
+
+  api:
+    container_name: api
+    build: .
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=vecindario
+      - POSTGRES_HOST=postgres
+      - RAILS_LOG_TO_STDOUT=enabled 
+    ports:
+      - 3000:3000
+    links:
+      - postgres:postgres
+    depends_on:
+      - postgres
+    restart: unless-stopped
